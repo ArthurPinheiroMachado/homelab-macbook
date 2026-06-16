@@ -8,6 +8,8 @@ on:
       - prod
       - main
 
+  workflow_dispatch:
+
 jobs:
   validate-prometheus:
     runs-on: ubuntu-latest
@@ -19,6 +21,7 @@ jobs:
         run: |
           docker run \
             --rm \
+            --entrypoint promtool \
             -v ${{ github.workspace }}/prometheus/config:/config \
             prom/prometheus \
             promtool check config /config/prometheus.yaml
@@ -27,6 +30,7 @@ jobs:
         run: |
           docker run \
             --rm \
+            --entrypoint promtool \
             -v ${{ github.workspace }}/prometheus/rules:/rules \
             prom/prometheus \
-            promtool check rules /rules/*.yaml
+            promtool check rules /rules
