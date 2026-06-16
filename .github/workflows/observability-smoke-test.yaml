@@ -1,0 +1,71 @@
+name: Observability Smoke Test
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - test
+      - prod
+      - main
+
+jobs:
+
+  smoke-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Create Networks
+        run: |
+          docker network create frontend
+          docker network create backend
+
+      - name: Start Node Exporter
+        working-directory: node-exporter
+        run: docker compose up -d
+
+      - name: Start Prometheus
+        working-directory: prometheus
+        run: docker compose up -d
+
+      - name: Start Grafana
+        working-directory: grafana
+        run: docker compose up -d
+
+      - name: Start Loki
+        working-directory: loki
+        run: docker compose up -d
+
+      - name: Start Promtail
+        working-directory: promtail
+        run: docker compose up -d
+
+      - name: Start Alertmanager
+        working-directory: alertmanager
+        run: docker compose up -d
+
+      - name: Wait Services
+        run: sleep 30
+
+      - name: Check Prometheus
+        run: |
+          curl -f http://localhost:9090/-/healthy
+
+      - name: Check Grafana
+        run: |
+          curl -f http://localhost:3000/api/health
+
+      - name: Check Loki
+        run: |
+          curl -f http://localhost:3100/ready
+
+      - name: Check Alertmanager
+        run: |
+          curl -f http://localhost:9093/-/healthy
+
+      - name: Check Node Exporter
+        run: |
+          curl -f http://localhost:9100/metrics
