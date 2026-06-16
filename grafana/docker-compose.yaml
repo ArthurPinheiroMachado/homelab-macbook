@@ -1,5 +1,7 @@
 ---
 networks:
+  backend:
+    external: true
   frontend:
     external: true
 volumes:
@@ -15,5 +17,6 @@ services:
       - "3000:3000"
     networks:
       - frontend
+      - backend
     restart: unless-stopped
 
