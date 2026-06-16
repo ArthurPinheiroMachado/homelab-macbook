@@ -1,0 +1,24 @@
+name: Validate Alertmanager
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - test
+      - prod
+      - main
+
+jobs:
+  validate-alertmanager:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Alertmanager Config
+        run: |
+          docker run \
+            --rm \
+            -v ${{ github.workspace }}/alertmanager/config:/config \
+            prom/alertmanager \
+            amtool check-config /config/alertmanager-prod.yaml

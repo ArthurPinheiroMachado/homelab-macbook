@@ -1,0 +1,30 @@
+name: Docker Compose Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - test
+      - prod
+      - main
+
+jobs:
+  validate-compose:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - prometheus
+          - grafana
+          - loki
+          - promtail
+          - alertmanager
+          - node-exporter
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Compose
+        working-directory: ${{ matrix.service }}
+        run: docker compose config

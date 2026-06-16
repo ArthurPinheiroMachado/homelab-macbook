@@ -1,0 +1,25 @@
+name: Validate Promtail
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - test
+      - prod
+      - main
+
+jobs:
+  validate-promtail:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Promtail Config
+        run: |
+          docker run \
+            --rm \
+            -v ${{ github.workspace }}/promtail/config:/config \
+            grafana/promtail:latest \
+            -config.file=/config/promtail-config.yaml \
+            -check-syntax
