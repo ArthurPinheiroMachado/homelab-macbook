@@ -1,0 +1,97 @@
+global:
+  resolve_timeout: 5m
+
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'your@email.com'
+  smtp_auth_username: 'your@email.com'
+  smtp_auth_password: 'yourapppassword'
+  smtp_require_tls: true
+
+route:
+  receiver: default
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+
+  routes:
+
+    - matchers:
+        - alertname="HighCPUUsage"
+      receiver: cpu-alert
+
+    - matchers:
+        - alertname="HighMemoryUsage"
+      receiver: memory-alert
+
+    - matchers:
+        - alertname="DiskSpaceLow"
+      receiver: disk-alert
+
+    - matchers:
+        - alertname="InstanceDown"
+      receiver: instance-alert
+
+    - matchers:
+        - alertname="LokiDown"
+      receiver: loki-alert
+
+    - matchers:
+        - alertname="GrafanaDown"
+      receiver: grafana-alert
+
+    - matchers:
+        - alertname="PrometheusDown"
+      receiver: prometheus-alert
+
+receivers:
+
+  - name: default
+
+  - name: cpu-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'CPU acima de 80%'
+
+  - name: memory-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'RAM acima de 90%'
+
+  - name: disk-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'Disco acima de 80%'
+
+  - name: instance-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'Servidor Offline'
+
+  - name: loki-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'Loki Offline'
+
+  - name: grafana-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'Grafana Offline'
+
+  - name: prometheus-alert
+    email_configs:
+      - to: 'your@email.com'
+        send_resolved: true
+        headers:
+          Subject: 'Prometheus Offline'
