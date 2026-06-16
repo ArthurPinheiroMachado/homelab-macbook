@@ -1,0 +1,20 @@
+---
+networks:
+  backend:
+    external: true
+volumes:
+  loki-data:
+    driver: local
+services:
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    command: "-config.file=/etc/loki/loki-config.yaml"
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./config/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+    restart: unless-stopped
+    networks:
+      - backend
+
