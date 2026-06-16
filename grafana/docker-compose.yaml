@@ -1,0 +1,19 @@
+---
+networks:
+  frontend:
+    external: true
+volumes:
+  grafana-data:
+    driver: local
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend
+    restart: unless-stopped
+
