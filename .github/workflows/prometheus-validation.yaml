@@ -33,4 +33,4 @@ jobs:
             --entrypoint promtool \
             -v ${{ github.workspace }}/prometheus/rules:/rules \
             prom/prometheus \
-            check rules /rules
+            check rules /rules/*.yaml
