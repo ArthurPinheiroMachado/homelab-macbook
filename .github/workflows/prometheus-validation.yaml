@@ -28,9 +28,11 @@ jobs:
 
       - name: Validate alert rules
         run: |
-          docker run \
-            --rm \
-            --entrypoint promtool \
-            -v ${{ github.workspace }}/prometheus/rules:/rules \
-            prom/prometheus \
-            check rules /rules/*.yaml
+          for file in ${{ github.workspace }}/prometheus/rules/*.yaml; do
+            docker run \
+              --rm \
+              --entrypoint promtool \
+              -v ${{ github.workspace }}/prometheus/rules:/rules \
+              prom/prometheus \
+              check rules /rules/$(basename $file)
+          done
