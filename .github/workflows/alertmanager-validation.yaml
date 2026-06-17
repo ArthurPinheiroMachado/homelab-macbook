@@ -8,6 +8,8 @@ on:
       - prod
       - main
 
+  workflow_dispatch:
+
 jobs:
   validate-alertmanager:
     runs-on: ubuntu-latest
