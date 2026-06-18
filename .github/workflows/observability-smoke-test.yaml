@@ -24,7 +24,7 @@ jobs:
           docker network create backend
 
       - name: Start Node Exporter
-        working-directory: node-exporter
+        working-directory: node_exporter
         run: docker compose up -d
 
       - name: Start Prometheus
