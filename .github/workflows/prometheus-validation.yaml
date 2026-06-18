@@ -31,6 +31,6 @@ jobs:
           docker run \
             --rm \
             --entrypoint sh \
-            -v ${{ github.workspace }}/prometheus/rules:/rules \
+            -v ${{ github.workspace }}/prometheus/config/rules:/rules \
             prom/prometheus \
             -c "promtool check rules /rules/*.yaml"
