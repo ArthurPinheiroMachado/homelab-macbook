@@ -48,7 +48,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait Services
-        run: sleep 60
+        run: sleep 90
 
       - name: Check Prometheus
         run: |
