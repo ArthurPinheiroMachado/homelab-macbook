@@ -48,7 +48,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait Services
-        run: sleep 90
+        run: sleep 60
 
       - name: Check Prometheus
         run: |
@@ -60,6 +60,7 @@ jobs:
 
       - name: Check Loki
         run: |
+          sleep 60
           curl -f http://localhost:3100/ready
 
       - name: Check Alertmanager
