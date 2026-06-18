@@ -22,9 +22,13 @@ jobs:
         run: |
           docker network create frontend
           docker network create backend
+      
+      - name: Start Loki
+        working-directory: loki
+        run: docker compose up -d
 
       - name: Start Node Exporter
-        working-directory: node-exporter
+        working-directory: node_exporter
         run: docker compose up -d
 
       - name: Start Prometheus
@@ -33,10 +37,6 @@ jobs:
 
       - name: Start Grafana
         working-directory: grafana
-        run: docker compose up -d
-
-      - name: Start Loki
-        working-directory: loki
         run: docker compose up -d
 
       - name: Start Promtail
@@ -58,14 +58,24 @@ jobs:
         run: |
           curl -f http://localhost:3000/api/health
 
-      - name: Check Loki
-        run: |
-          curl -f http://localhost:3100/ready
-
       - name: Check Alertmanager
         run: |
           curl -f http://localhost:9093/-/healthy
-
+      
       - name: Check Node Exporter
         run: |
           curl -f http://localhost:9100/metrics
+          
+      - name: Check Loki
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3100/ready > /dev/null 2>&1; then
+              echo "Loki is ready"
+              exit 0
+            fi
+            echo "Waiting for Loki... attempt $i"
+            sleep 10
+          done
+          echo "Loki failed to become ready"
+          curl -v http://localhost:3100/ready
+          exit 1

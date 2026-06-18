@@ -14,9 +14,10 @@
       command: "--config.file=/etc/prometheus/prometheus.yaml"
       volumes:
         - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+        - ./config/rules:/etc/prometheus/rules:ro
         - prometheus-data:/prometheus
       ports:
-        - "9090:9090" 
+        - "9090:9090"
       networks:
         - frontend
         - backend

@@ -8,6 +8,8 @@ on:
       - prod
       - main
 
+  workflow_dispatch:
+
 jobs:
   validate-alertmanager:
     runs-on: ubuntu-latest
@@ -19,6 +21,7 @@ jobs:
         run: |
           docker run \
             --rm \
+            --entrypoint amtool \
             -v ${{ github.workspace }}/alertmanager/config:/config \
             prom/alertmanager \
-            amtool check-config /config/alertmanager-prod.yaml
+            check-config /config/alertmanager.yaml
