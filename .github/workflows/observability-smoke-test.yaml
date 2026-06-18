@@ -60,7 +60,7 @@ jobs:
 
       - name: Check Loki
         run: |
-          sleep 60
+          sleep 90
           curl -f http://localhost:3100/ready
 
       - name: Check Alertmanager
