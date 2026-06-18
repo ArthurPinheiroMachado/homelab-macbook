@@ -1,0 +1,36 @@
+name: Validate Prometheus
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - test
+      - prod
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  validate-prometheus:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate prometheus.yaml
+        run: |
+          docker run \
+            --rm \
+            --entrypoint promtool \
+            -v ${{ github.workspace }}/prometheus/config:/config \
+            prom/prometheus \
+            check config /config/prometheus.yaml
+
+      - name: Validate alert rules
+        run: |
+          docker run \
+            --rm \
+            --entrypoint sh \
+            -v ${{ github.workspace }}/prometheus/config/rules:/rules \
+            prom/prometheus \
+            -c "promtool check rules /rules/*.yaml"
