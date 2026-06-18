@@ -24,4 +24,4 @@ jobs:
             --entrypoint amtool \
             -v ${{ github.workspace }}/alertmanager/config:/config \
             prom/alertmanager \
-            check-config /config/alertmanager-prod.yaml
+            check-config /config/alertmanager.yaml
