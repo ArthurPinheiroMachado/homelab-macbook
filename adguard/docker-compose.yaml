@@ -1,0 +1,26 @@
+---
+networks:
+  backend:
+    external: true
+
+volumes:
+  config:
+    driver: local
+  work:
+    driver: local
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguard
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 80:80/tcp
+      - 3030:3000/tcp
+    volumes:
+      - config:/opt/adguardhome/conf
+      - work:/opt/adguardhome/work
+    restart: unless-stopped
+    networks:
+      - backend
